@@ -1,4 +1,4 @@
-import { Pool } from 'https://deno.land/x/postgres/mod.ts';
+import { Client, Pool } from 'https://deno.land/x/postgres/mod.ts';
 import { PoolClient } from 'https://deno.land/x/postgres/client.ts';
 
 // const clientConfig = `postgres://user:password@localhost:5432/test?application_name=my_custom_app`;
@@ -10,17 +10,30 @@ const clientConfig = {
   hostname: Deno.env.get('DB_HOST'),
   port: Deno.env.get('DB_PORT'),
 };
-// export const client = new Client(clientConfig);
+
+// basic Client
+const client = new Client(clientConfig);
 
 // pooling
 const POOL_CONNECTIONS = 20;
 const dbPool = new Pool(clientConfig, POOL_CONNECTIONS);
 
-// run query func
-export async function runQuery(query: string) {
+// run query return object
+async function runQueryObj(query: string) {
   const client: PoolClient = await dbPool.connect();
   const dbResult = await client.queryObject(query);
   await client.release();
 
   return dbResult;
 }
+
+// run query return array
+async function runQueryArr(query: string) {
+  const client: PoolClient = await dbPool.connect();
+  const dbResult = await client.queryArray(query);
+  await client.release();
+
+  return dbResult;
+}
+
+export { client, dbPool, runQueryObj, runQueryArr };

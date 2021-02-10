@@ -10,6 +10,7 @@ Prasyaratnya yaitu:
 - Install Denon
 - Set Denon in ENV PATH
 - Install and setup PostgreSQL
+- setup .env for PostgreSQL
 
 ## Installation
 
